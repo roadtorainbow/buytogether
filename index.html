@@ -157,28 +157,28 @@
       </div>
     </div>
 
-    <!-- 2. 商品分區 -->
+    <!-- 2. 全商品列表區 -->
     <div class="card">
-      <div class="card-title">海鮮乾貨 / 零嘴（可選 S/L 規格）</div>
+      <div class="card-title">海鮮乾貨與零嘴類 (S: $150 / L: $200)</div>
       <div id="sec1"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">柴魚、鱈魚條與零嘴類</div>
+      <div class="card-title">柴魚片、鱈魚條與其他零嘴</div>
       <div id="sec2"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">罐裝與禮餅系列</div>
+      <div class="card-title">罐裝系列與福和成封仔餅</div>
       <div id="sec3"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">醬料、周邊與其他商品</div>
+      <div class="card-title">醬料、刨刀與周邊商品</div>
       <div id="sec4"></div>
     </div>
 
-    <!-- 3. 底部結算區 -->
+    <!-- 3. 底部結算 -->
     <div class="bottom-bar">
       <div class="price-details">
         <span>小計 $<span id="subtotal">0</span> + 運費 $<span id="shipping">0</span></span>
@@ -190,129 +190,137 @@
 
   <script>
     // ⚠️ 請填入你在新 Google 帳號部署獲得的 Apps Script Web App URL
-    const GAS_WEB_APP_URL = "請在此處貼上步驟二的新網址";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLaBQ4-1ifrcQJpJtQgEsRYdcPRaWuVSlbjw5b9mM9uc4VBC177lnaxEDSx-XDzNNT/exec";
 
-    // 依據 2026.05.27 大慶柴魚價目表建立全品項資料庫
+    // 對照 2026.05.27 大慶柴魚價目表圖片 52 項全品項資料庫
     const PRODUCTS = [
-      // 區塊 1：左欄（S: $150 / L: $200 規格區）
-      { id: "m1", sec: "sec1", name: "比目魚骨", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m2", sec: "sec1", name: "香魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m3", sec: "sec1", name: "原味魷魚絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m4", sec: "sec1", name: "碳烤魷魚絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m5", sec: "sec1", name: "煙燻魷魚絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m6", sec: "sec1", name: "辣味魷魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m7", sec: "sec1", name: "蜜汁魷魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m8", sec: "sec1", name: "碳烤魷魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m9", sec: "sec1", name: "醉魚", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m10", sec: "sec1", name: "章魚花", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m11", sec: "sec1", name: "豬肉條", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m12", sec: "sec1", name: "純粹旗魚鬆 (袋裝)", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m13", sec: "sec1", name: "酥香旗魚酥 (袋裝)", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m14", sec: "sec1", name: "鬼頭刀魚脯 (袋裝)", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m15", sec: "sec1", name: "原燒魷魚切絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m16", sec: "sec1", name: "大卷片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m17", sec: "sec1", name: "昆布糖", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m18", sec: "sec1", name: "原味飛魚肉乾", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m19", sec: "sec1", name: "辣味飛魚肉乾", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
-      { id: "m20", sec: "sec1", name: "梅魚酥", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      // 第一區塊：左欄 (S: 150 / L: 200 規格)
+      { id: "p1", sec: "sec1", name: "比目魚骨", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p2", sec: "sec1", name: "香魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p3", sec: "sec1", name: "原味魷魚絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p4", sec: "sec1", name: "碳烤魷魚絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p5", sec: "sec1", name: "煙燻魷魚絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p6", sec: "sec1", name: "辣味魷魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p7", sec: "sec1", name: "蜜汁魷魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p8", sec: "sec1", name: "碳烤魷魚片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p9", sec: "sec1", name: "醉魚", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p10", sec: "sec1", name: "章魚花", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p11", sec: "sec1", name: "豬肉條", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p12", sec: "sec1", name: "純粹旗魚鬆 (袋裝)", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p13", sec: "sec1", name: "酥香旗魚酥 (袋裝)", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p14", sec: "sec1", name: "鬼頭刀魚脯 (袋裝)", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p15", sec: "sec1", name: "原燒魷魚切絲", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p16", sec: "sec1", name: "大卷片", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p17", sec: "sec1", name: "昆布糖", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p18", sec: "sec1", name: "原味飛魚肉乾", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p19", sec: "sec1", name: "辣味飛魚肉乾", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
+      { id: "p20", sec: "sec1", name: "梅魚酥", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
 
-      // 區塊 2：右欄（柴魚、鱈魚條與其他零嘴）
-      { id: "m21", sec: "sec2", name: "現刷柴魚片 (正鰹)", specs: [{ name: "150g裝 $150", price: 150 }, { name: "260g裝 $260", price: 260 }] },
-      { id: "m22", sec: "sec2", name: "蜜汁柴魚酥", specs: [{ name: "150g(袋) $150", price: 150 }, { name: "150g(罐) $150", price: 150 }] },
-      { id: "m23", sec: "sec2", name: "正鰹柴魚粉 (研磨)(限量)", specs: [{ name: "$140 / 罐", price: 140 }] },
-      { id: "m24", sec: "sec2", name: "鱈魚鐵板燒", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m25", sec: "sec2", name: "原味鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m26", sec: "sec2", name: "芝麻鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m27", sec: "sec2", name: "麻辣鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m28", sec: "sec2", name: "海苔鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m29", sec: "sec2", name: "香之魚", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m30", sec: "sec2", name: "A級鮪魚糖", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m31", sec: "sec2", name: "正鰹柴魚角", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
-      { id: "m32", sec: "sec2", name: "台灣小卷片", specs: [{ name: "$220 / 包", price: 220 }] },
-      { id: "m33", sec: "sec2", name: "紫菜", specs: [{ name: "$130 / 包", price: 130 }] },
-      { id: "m34", sec: "sec2", name: "柴魚薯條", specs: [{ name: "$100 / 包", price: 100 }] },
-      { id: "m35", sec: "sec2", name: "柴魚米球 (買5送1)", specs: [{ name: "$150 / 包", price: 150 }] },
+      // 第二區塊：右上欄 (柴魚、鱈魚條與零嘴)
+      { id: "p21", sec: "sec2", name: "現刷柴魚片 (正鰹)", specs: [{ name: "150g裝 $150", price: 150 }, { name: "260g裝 $260", price: 260 }] },
+      { id: "p22", sec: "sec2", name: "蜜汁柴魚酥", specs: [{ name: "150g(袋) $150", price: 150 }, { name: "150g(罐) $150", price: 150 }] },
+      { id: "p23", sec: "sec2", name: "正鰹柴魚粉 (研磨)(限量)", specs: [{ name: "$140 / 罐", price: 140 }] },
+      { id: "p24", sec: "sec2", name: "鱈魚鐵板燒", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p25", sec: "sec2", name: "原味鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p26", sec: "sec2", name: "芝麻鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p27", sec: "sec2", name: "麻辣鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p28", sec: "sec2", name: "海苔鱈魚香絲", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p29", sec: "sec2", name: "香之魚", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p30", sec: "sec2", name: "A級鮪魚糖", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p31", sec: "sec2", name: "正鰹柴魚角", specs: [{ name: "S $100", price: 100 }, { name: "L $150", price: 150 }] },
+      { id: "p32", sec: "sec2", name: "台灣小卷片", specs: [{ name: "$220 / 包", price: 220 }] },
+      { id: "p33", sec: "sec2", name: "紫菜", specs: [{ name: "$130 / 包", price: 130 }] },
+      { id: "p34", sec: "sec2", name: "柴魚薯條", specs: [{ name: "$100 / 包", price: 100 }] },
+      { id: "p35", sec: "sec2", name: "柴魚米球 (買5送1)", specs: [{ name: "$150 / 包", price: 150 }] },
 
-      // 區塊 3：罐裝系列與封仔餅
-      { id: "m36", sec: "sec3", name: "(罐裝) 純粹旗魚鬆", specs: [{ name: "$200 / 罐", price: 200 }] },
-      { id: "m37", sec: "sec3", name: "(罐裝) 酥香旗魚酥", specs: [{ name: "$200 / 罐", price: 200 }] },
-      { id: "m38", sec: "sec3", name: "(罐裝) 鬼頭刀魚脯", specs: [{ name: "$200 / 罐", price: 200 }] },
-      { id: "m39", sec: "sec3", name: "(罐裝) 中蝦杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
-      { id: "m40", sec: "sec3", name: "(罐裝) 黃金杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
-      { id: "m41", sec: "sec3", name: "(罐裝) 杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
-      { id: "m42", sec: "sec3", name: "福和成封仔餅 - 綿密紅豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m43", sec: "sec3", name: "福和成封仔餅 - 經典綠豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m44", sec: "sec3", name: "福和成封仔餅 - 清香白豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m45", sec: "sec3", name: "福和成封仔餅 - 洛神花 (10入)", specs: [{ name: "$300 / 封", price: 300 }] },
-      { id: "m46", sec: "sec3", name: "福和成封仔餅 - 蜂蜜芋頭 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m47", sec: "sec3", name: "福和成封仔餅 - 綜合五色 (10入)", specs: [{ name: "$280 / 封", price: 280 }] },
+      // 第三區塊：右下欄 (罐裝與封仔餅)
+      { id: "p36", sec: "sec3", name: "(罐裝) 純粹旗魚鬆", specs: [{ name: "$200 / 罐", price: 200 }] },
+      { id: "p37", sec: "sec3", name: "(罐裝) 酥香旗魚酥", specs: [{ name: "$200 / 罐", price: 200 }] },
+      { id: "p38", sec: "sec3", name: "(罐裝) 鬼頭刀魚脯", specs: [{ name: "$200 / 罐", price: 200 }] },
+      { id: "p39", sec: "sec3", name: "(罐裝) 中蝦杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
+      { id: "p40", sec: "sec3", name: "(罐裝) 黃金杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
+      { id: "p41", sec: "sec3", name: "(罐裝) 杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
+      { id: "p42", sec: "sec3", name: "福和成封仔餅 - 綿密紅豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "p43", sec: "sec3", name: "福和成封仔餅 - 經典綠豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "p44", sec: "sec3", name: "福和成封仔餅 - 清香白豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "p45", sec: "sec3", name: "福和成封仔餅 - 洛神花 (10入)", specs: [{ name: "$300 / 封", price: 300 }] },
+      { id: "p46", sec: "sec3", name: "福和成封仔餅 - 蜂蜜芋頭 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "p47", sec: "sec3", name: "福和成封仔餅 - 綜合五色 (10入)", specs: [{ name: "$280 / 封", price: 280 }] },
 
-      // 區塊 4：醬料與其他周邊
-      { id: "m48", sec: "sec4", name: "鬼頭刀干貝醬 (小辣)", specs: [{ name: "$420 / 瓶", price: 420 }] },
-      { id: "m49", sec: "sec4", name: "飛魚卵干貝醬 (中辣)", specs: [{ name: "$420 / 瓶", price: 420 }] },
-      { id: "m50", sec: "sec4", name: "寶貝醬 (滿滿魚乾 富含鈣質)", specs: [{ name: "$420 / 瓶", price: 420 }] },
-      { id: "m51", sec: "sec4", name: "大慶柴魚御用刨刀", specs: [{ name: "$350 / 支", price: 350 }] },
-      { id: "m52", sec: "sec4", name: "送禮紙袋", specs: [{ name: "$15 / 個", price: 15 }] }
+      // 第四區塊：左下欄 (醬料、刨刀、紙袋)
+      { id: "p48", sec: "sec4", name: "鬼頭刀干貝醬 (小辣)", specs: [{ name: "$420 / 瓶", price: 420 }] },
+      { id: "p49", sec: "sec4", name: "飛魚卵干貝醬 (中辣)", specs: [{ name: "$420 / 瓶", price: 420 }] },
+      { id: "p50", sec: "sec4", name: "寶貝醬 (富含鈣質)", specs: [{ name: "$420 / 瓶", price: 420 }] },
+      { id: "p51", sec: "sec4", name: "大慶柴魚御用刨刀", specs: [{ name: "$350 / 支", price: 350 }] },
+      { id: "p52", sec: "sec4", name: "送禮紙袋", specs: [{ name: "$15 / 個", price: 15 }] }
     ];
 
+    // 初始化動態產生所有商品與選單
     window.onload = function() {
-      PRODUCTS.forEach(p => {
-        const container = document.getElementById(p.sec);
+      PRODUCTS.forEach(function(p) {
+        var container = document.getElementById(p.sec);
         if (!container) return;
-        const row = document.createElement('div');
+
+        var row = document.createElement('div');
         row.className = 'item-row';
 
-        let specOptions = p.specs.map((s, i) => `<option value="${s.price}" data-name="${s.name}">${s.name}</option>`).join('');
+        var specOptionsHTML = '';
+        for (var i = 0; i < p.specs.length; i++) {
+          var s = p.specs[i];
+          specOptionsHTML += '<option value="' + s.price + '" data-name="' + s.name + '">' + s.name + '</option>';
+        }
 
-        row.innerHTML = `
-          <div class="item-info">
-            <div class="item-name">${p.name}</div>
-          </div>
-          <div class="item-controls">
-            <select class="spec-select" id="spec-${p.id}" onchange="calculate()">
-              ${specOptions}
-            </select>
-            <div class="qty-control">
-              <button type="button" class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
-              <input type="number" id="qty-${p.id}" class="qty-input" value="0" readonly>
-              <button type="button" class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
-            </div>
-          </div>
-        `;
+        row.innerHTML = 
+          '<div class="item-info">' +
+            '<div class="item-name">' + p.name + '</div>' +
+          '</div>' +
+          '<div class="item-controls">' +
+            '<select class="spec-select" id="spec-' + p.id + '" onchange="calculate()">' +
+              specOptionsHTML +
+            '</select>' +
+            '<div class="qty-control">' +
+              '<button type="button" class="qty-btn" onclick="changeQty(\'' + p.id + '\', -1)">-</button>' +
+              '<input type="number" id="qty-' + p.id + '" class="qty-input" value="0" readonly>' +
+              '<button type="button" class="qty-btn" onclick="changeQty(\'' + p.id + '\', 1)">+</button>' +
+            '</div>' +
+          '</div>';
+
         container.appendChild(row);
       });
     };
 
     function changeQty(id, delta) {
-      const input = document.getElementById(`qty-${id}`);
-      let val = parseInt(input.value) || 0;
+      var input = document.getElementById('qty-' + id);
+      if (!input) return;
+      var val = parseInt(input.value) || 0;
       val = Math.max(0, val + delta);
       input.value = val;
       calculate();
     }
 
     function calculate() {
-      let subtotal = 0;
+      var subtotal = 0;
 
-      PRODUCTS.forEach(p => {
-        const qtyInput = document.getElementById(`qty-${p.id}`);
-        if (!qtyInput) return;
-        
-        const qty = parseInt(qtyInput.value) || 0;
-        const specSelect = document.getElementById(`spec-${p.id}`);
-        const price = parseInt(specSelect.value) || 0;
+      for (var i = 0; i < PRODUCTS.length; i++) {
+        var p = PRODUCTS[i];
+        var qtyInput = document.getElementById('qty-' + p.id);
+        if (!qtyInput) continue;
+
+        var qty = parseInt(qtyInput.value) || 0;
+        var specSelect = document.getElementById('spec-' + p.id);
+        var price = parseInt(specSelect.value) || 0;
 
         if (qty > 0) {
           if (p.name === '柴魚米球 (買5送1)' && qty >= 6) {
-            const freeQty = Math.floor(qty / 6);
+            var freeQty = Math.floor(qty / 6);
             subtotal += (qty - freeQty) * price;
           } else {
             subtotal += qty * price;
           }
         }
-      });
+      }
 
-      let shipping = (subtotal > 0 && subtotal < 2500) ? 130 : 0;
+      var shipping = (subtotal > 0 && subtotal < 2500) ? 130 : 0;
       
       document.getElementById('subtotal').textContent = subtotal;
       document.getElementById('shipping').textContent = shipping;
@@ -322,32 +330,33 @@
     document.getElementById('orderForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      let itemsList = [];
-      PRODUCTS.forEach(p => {
-        const qtyInput = document.getElementById(`qty-${p.id}`);
-        if (!qtyInput) return;
+      var itemsList = [];
+      for (var i = 0; i < PRODUCTS.length; i++) {
+        var p = PRODUCTS[i];
+        var qtyInput = document.getElementById('qty-' + p.id);
+        if (!qtyInput) continue;
 
-        const qty = parseInt(qtyInput.value) || 0;
+        var qty = parseInt(qtyInput.value) || 0;
         if (qty > 0) {
-          const specSelect = document.getElementById(`spec-${p.id}`);
-          const specName = specSelect.options[specSelect.selectedIndex].getAttribute('data-name');
-          itemsList.push(`${p.name} [${specName}] x${qty}`);
+          var specSelect = document.getElementById('spec-' + p.id);
+          var specName = specSelect.options[specSelect.selectedIndex].getAttribute('data-name');
+          itemsList.push(p.name + ' [' + specName + '] x' + qty);
         }
-      });
+      }
 
       if (itemsList.length === 0) {
         alert("請至少選擇一件商品！");
         return;
       }
 
-      const payload = {
+      var payload = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
         items: itemsList.join(', '),
         total: document.getElementById('total').textContent
       };
 
-      const btn = document.getElementById('submitBtn');
+      var btn = document.getElementById('submitBtn');
       btn.disabled = true;
       btn.textContent = "傳送中...";
 
@@ -357,20 +366,20 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-      .then(() => {
+      .then(function() {
         alert('訂單已送出成功！');
         document.getElementById('orderForm').reset();
-        PRODUCTS.forEach(p => {
-          const el = document.getElementById(`qty-${p.id}`);
+        for (var j = 0; j < PRODUCTS.length; j++) {
+          var el = document.getElementById('qty-' + PRODUCTS[j].id);
           if (el) el.value = 0;
-        });
+        }
         calculate();
       })
-      .catch(err => {
+      .catch(function(err) {
         alert('送出失敗，請檢查網路');
         console.error(err);
       })
-      .finally(() => {
+      .finally(function() {
         btn.disabled = false;
         btn.textContent = "送出合購訂單";
       });
