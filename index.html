@@ -192,7 +192,7 @@
     // ⚠️ 請填入你在新 Google 帳號部署獲得的 Apps Script Web App URL
     const GAS_WEB_APP_URL = "請在此處貼上步驟二的新網址";
 
-    // 依據 2026.05.27 大慶柴魚價目表 100% 建立全品項資料庫
+    // 依據 2026.05.27 大慶柴魚價目表建立全品項資料庫
     const PRODUCTS = [
       // 區塊 1：左欄（S: $150 / L: $200 規格區）
       { id: "m1", sec: "sec1", name: "比目魚骨", specs: [{ name: "S $150", price: 150 }, { name: "L $200", price: 200 }] },
@@ -235,17 +235,17 @@
 
       // 區塊 3：罐裝系列與封仔餅
       { id: "m36", sec: "sec3", name: "(罐裝) 純粹旗魚鬆", specs: [{ name: "$200 / 罐", price: 200 }] },
-      { id: "m37", sec: "sec3", name "(罐裝) 酥香旗魚酥", specs: [{ name: "$200 / 罐", price: 200 }] },
-      { id: "m38", sec: "sec3", name "(罐裝) 鬼頭刀魚脯", specs: [{ name: "$200 / 罐", price: 200 }] },
-      { id: "m39", sec: "sec3", name "(罐裝) 中蝦杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
-      { id: "m40", sec: "sec3", name "(罐裝) 黃金杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
-      { id: "m41", sec: "sec3", name "(罐裝) 杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
-      { id: "m42", sec: "sec3", name "福和成封仔餅 - 綿密紅豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m43", sec: "sec3", name "福和成封仔餅 - 經典綠豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m44", sec: "sec3", name "福和成封仔餅 - 清香白豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m45", sec: "sec3", name "福和成封仔餅 - 洛神花 (10入)", specs: [{ name: "$300 / 封", price: 300 }] },
-      { id: "m46", sec: "sec3", name "福和成封仔餅 - 蜂蜜芋頭 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
-      { id: "m47", sec: "sec3", name "福和成封仔餅 - 綜合五色 (10入)", specs: [{ name: "$280 / 封", price: 280 }] },
+      { id: "m37", sec: "sec3", name: "(罐裝) 酥香旗魚酥", specs: [{ name: "$200 / 罐", price: 200 }] },
+      { id: "m38", sec: "sec3", name: "(罐裝) 鬼頭刀魚脯", specs: [{ name: "$200 / 罐", price: 200 }] },
+      { id: "m39", sec: "sec3", name: "(罐裝) 中蝦杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
+      { id: "m40", sec: "sec3", name: "(罐裝) 黃金杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
+      { id: "m41", sec: "sec3", name: "(罐裝) 杏仁小魚", specs: [{ name: "$250 / 罐", price: 250 }] },
+      { id: "m42", sec: "sec3", name: "福和成封仔餅 - 綿密紅豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "m43", sec: "sec3", name: "福和成封仔餅 - 經典綠豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "m44", sec: "sec3", name: "福和成封仔餅 - 清香白豆 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "m45", sec: "sec3", name: "福和成封仔餅 - 洛神花 (10入)", specs: [{ name: "$300 / 封", price: 300 }] },
+      { id: "m46", sec: "sec3", name: "福和成封仔餅 - 蜂蜜芋頭 (10入)", specs: [{ name: "$260 / 封", price: 260 }] },
+      { id: "m47", sec: "sec3", name: "福和成封仔餅 - 綜合五色 (10入)", specs: [{ name: "$280 / 封", price: 280 }] },
 
       // 區塊 4：醬料與其他周邊
       { id: "m48", sec: "sec4", name: "鬼頭刀干貝醬 (小辣)", specs: [{ name: "$420 / 瓶", price: 420 }] },
