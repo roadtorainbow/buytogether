@@ -233,8 +233,8 @@
   </form>
 
   <script>
-    // 已自動替換為你的 GAS Web App URL
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3WJJpMs8rpMY53UeGDhWIh6ifOdMKmI48wbDrIC2xyfu0X5di_w1SV13Pg3AzsrJb/exec";
+    // 已自動替換為你最新的 Apps Script URL
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLaBQ4-1ifrcQJpJtQgEsRYdcPRaWuVSlbjw5b9mM9uc4VBC177lnaxEDSx-XDzNNT/exec";
 
     const qtyInputs = document.querySelectorAll('.qty-input');
     const subtotalEl = document.getElementById('subtotal');
@@ -304,11 +304,13 @@
 
       fetch(GAS_WEB_APP_URL, {
         method: 'POST',
-        contentType: 'application/json',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(payload)
       })
-      .then(res => res.json())
-      .then(data => {
+      .then(() => {
         alert('訂單已送出成功！');
         document.getElementById('orderForm').reset();
         qtyInputs.forEach(i => i.value = 0);
