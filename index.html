@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>大慶柴魚 - 合購表單</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 15px 15px 140px 15px; /* 底部留白避免被固定列遮住 */
+      background-color: #f4f5f7;
+      color: #333;
+    }
+    .header {
+      text-align: center;
+      padding: 10px 0;
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .header h2 { margin: 5px 0; font-size: 20px; color: #1a1a1a; }
+    .header p { margin: 0; font-size: 12px; color: #666; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      border-left: 4px solid #28a745;
+      padding-left: 8px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px; /* 16px 防止 iOS 自動放大畫面 */
+    }
+
+    /* 手機版商品列 layout */
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-info { flex: 1; padding-right: 10px; }
+    .item-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+    .item-price { font-size: 13px; color: #e4393c; margin-top: 4px; font-weight: bold; }
+    
+    /* 數量加減輸入框 */
+    .item-qty-control {
+      display: flex;
+      align-items: center;
+    }
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      background: #e9ecef;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .qty-input {
+      width: 45px;
+      height: 36px;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      margin: 0 4px;
+      border-radius: 6px;
+    }
+
+    /* 手機底部固定結算欄 */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 12px 16px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 999;
+    }
+    .price-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #666;
+    }
+    .total-price-text {
+      font-size: 18px;
+      font-weight: bold;
+      color: #e4393c;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .submit-btn:disabled { background: #b0bec5; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>🐟 大慶柴魚 合購單</h2>
+    <p>滿 $2,500 免運費（未達運費 $130）</p>
+  </div>
+
+  <form id="orderForm">
+    <!-- 1. 聯絡資訊 -->
+    <div class="card">
+      <div class="card-title">訂購人資訊</div>
+      <div class="form-group">
+        <label for="name">姓名 / 暱稱 *</label>
+        <input type="text" id="name" required placeholder="請輸入姓名">
+      </div>
+      <div class="form-group">
+        <label for="phone">聯絡電話 *</label>
+        <input type="tel" id="phone" required placeholder="09xx-xxx-xxx">
+      </div>
+    </div>
+
+    <!-- 2. 商品選單 -->
+    <div class="card">
+      <div class="card-title">選擇商品</div>
+
+      <!-- 商品項目範例 -->
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-name">比目魚骨 (S)</div>
+          <div class="item-price">$150</div>
+        </div>
+        <div class="item-qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <input type="number" min="0" value="0" data-price="150" data-name="比目魚骨 (S)" class="qty-input" readonly>
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </div>
+      </div>
+
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-name">比目魚骨 (L)</div>
+          <div class="item-price">$200</div>
+        </div>
+        <div class="item-qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <input type="number" min="0" value="0" data-price="200" data-name="比目魚骨 (L)" class="qty-input" readonly>
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </div>
+      </div>
+
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-name">現刷柴魚片 (正鰹) 150g</div>
+          <div class="item-price">$150</div>
+        </div>
+        <div class="item-qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <input type="number" min="0" value="0" data-price="150" data-name="現刷柴魚片 150g" class="qty-input" readonly>
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </div>
+      </div>
+
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-name">柴魚米球 <span style="font-size:11px; color:#28a745;">(買5送1)</span></div>
+          <div class="item-price">$150</div>
+        </div>
+        <div class="item-qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <input type="number" min="0" value="0" data-price="150" data-name="柴魚米球" class="qty-input" readonly>
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </div>
+      </div>
+
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-name">鬼頭刀干貝醬 (小辣)</div>
+          <div class="item-price">$420</div>
+        </div>
+        <div class="item-qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <input type="number" min="0" value="0" data-price="420" data-name="鬼頭刀干貝醬(小辣)" class="qty-input" readonly>
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </div>
+      </div>
+
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-name">(罐裝) 純粹旗魚鬆</div>
+          <div class="item-price">$200</div>
+        </div>
+        <div class="item-qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <input type="number" min="0" value="0" data-price="200" data-name="(罐裝)純粹旗魚鬆" class="qty-input" readonly>
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 底部固定金額與提交 -->
+    <div class="bottom-bar">
+      <div class="price-details">
+        <span>商品 $<span id="subtotal">0</span> + 運費 $<span id="shipping">0</span></span>
+        <div>總計：<span class="total-price-text">$<span id="total">0</span></span></div>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">送出合購訂單</button>
+    </div>
+  </form>
+
+  <script>
+    // ⚠️ 貼上你的 Google Apps Script 部署 URL
+    const GAS_WEB_APP_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+
+    const qtyInputs = document.querySelectorAll('.qty-input');
+    const subtotalEl = document.getElementById('subtotal');
+    const shippingEl = document.getElementById('shipping');
+    const totalEl = document.getElementById('total');
+
+    // 手機按鈕加減數量
+    function changeQty(btn, delta) {
+      const input = btn.parentElement.querySelector('.qty-input');
+      let currentVal = parseInt(input.value) || 0;
+      currentVal = Math.max(0, currentVal + delta);
+      input.value = currentVal;
+      calculate();
+    }
+
+    // 計算總金額邏輯
+    function calculate() {
+      let subtotal = 0;
+      qtyInputs.forEach(input => {
+        const qty = parseInt(input.value) || 0;
+        const price = parseInt(input.getAttribute('data-price')) || 0;
+        const name = input.getAttribute('data-name');
+
+        // 買 5 送 1 計價規則
+        if (name === '柴魚米球' && qty >= 6) {
+          const freeQty = Math.floor(qty / 6);
+          subtotal += (qty - freeQty) * price;
+        } else {
+          subtotal += qty * price;
+        }
+      });
+
+      let shipping = 0;
+      if (subtotal > 0) {
+        shipping = subtotal >= 2500 ? 0 : 130;
+      }
+
+      subtotalEl.textContent = subtotal;
+      shippingEl.textContent = shipping;
+      totalEl.textContent = subtotal + shipping;
+    }
+
+    // 送出表單
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const subtotal = parseInt(subtotalEl.textContent);
+      if (subtotal === 0) {
+        alert('請至少選擇一件商品！');
+        return;
+      }
+
+      let itemsList = [];
+      qtyInputs.forEach(input => {
+        const qty = parseInt(input.value) || 0;
+        if (qty > 0) {
+          itemsList.push(`${input.getAttribute('data-name')} x${qty}`);
+        }
+      });
+
+      const payload = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        items: itemsList.join(', '),
+        total: totalEl.textContent
+      };
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = "傳送中...";
+
+      fetch(GAS_WEB_APP_URL, {
+        method: 'POST',
+        contentType: 'application/json',
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert('訂單已送出成功！');
+        document.getElementById('orderForm').reset();
+        qtyInputs.forEach(i => i.value = 0);
+        calculate();
+      })
+      .catch(err => {
+        alert('送出失敗，請檢查網路後重試');
+        console.error(err);
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = "送出合購訂單";
+      });
+    });
+  </script>
+</body>
+</html>
