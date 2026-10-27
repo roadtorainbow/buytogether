@@ -1,231 +1,119 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>大慶柴魚 - 團購合購單</title>
-<style>
-:root{--ink:#12304a;--sea:#1f5f7a;--salt:#f1f6f7;--card:#fff;--bonito:#c23b4e;--flake:#fbe4df;--line:#dde7ea;--muted:#5d7380}
-*{box-sizing:border-box}
-body{margin:0;padding:0 0 110px;background:var(--salt);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
-.hero{background:var(--ink);color:#fff;text-align:center;padding:26px 16px 40px;position:relative}
-.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:18px;background:radial-gradient(circle at 12px 18px,var(--salt) 12px,transparent 13px) 0 0/24px 18px repeat-x}
-.hero .fish{font-size:34px;line-height:1}
-.hero h1{margin:8px 0 4px;font:700 26px/1.2 "Noto Serif TC","Songti TC","PMingLiU",serif;letter-spacing:.12em}
-.hero p{margin:3px 0;font-size:13px;color:#c9dbe4}
-main{padding:14px 14px 0;max-width:640px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
-.card-h{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--flake);border-bottom:1px solid var(--line)}
-.card-h .ic{font-size:24px}
-.card-h b{display:block;font:700 16px "Noto Serif TC","Songti TC",serif}
-.card-h small{color:var(--muted);font-size:12px}
-.body{padding:6px 14px 14px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
-.row:last-child{border-bottom:0}
-.row.on .nm{color:var(--bonito)}
-.info{flex:1;min-width:0}
-.nm{font-size:15px;font-weight:600;line-height:1.35}
-.sub{font-size:12px;color:var(--muted)}
-.free{font-size:12px;font-weight:700;color:var(--bonito)}
-.ctl{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.pr{font-size:13px;color:var(--sea);font-weight:600;white-space:nowrap}
-select,input,textarea,button{font:inherit}
-.spec{padding:6px;border:1px solid #bcccd3;border-radius:8px;font-size:13px;background:#fff;color:var(--ink);max-width:112px}
-.qty{display:flex;align-items:center}
-.qb{width:34px;height:34px;border:0;border-radius:50%;background:var(--ink);color:#fff;font-size:18px;line-height:1}
-.qb:active{background:var(--bonito)}
-.qn{width:32px;text-align:center;font-weight:700;font-size:15px;border:0;background:transparent;color:var(--ink)}
-.f label{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}
-.f input{width:100%;padding:11px;border:1px solid #bcccd3;border-radius:10px;font-size:15px;background:#fff;color:var(--ink)}
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:9;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 14px rgba(18,48,74,.12);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:12px}
-.sum{font-size:13px;color:var(--muted)}
-.sum b{display:block;font-size:20px;color:var(--bonito)}
-.go{border:0;border-radius:12px;padding:13px 22px;background:var(--bonito);color:#fff;font-size:16px;font-weight:700}
-.go:disabled{background:#aab9c0}
-.ghost{border:1px solid var(--ink);background:#fff;color:var(--ink)}
-.mask{position:fixed;inset:0;z-index:20;background:rgba(18,48,74,.55);display:flex;align-items:flex-end;justify-content:center}
-.mask[hidden]{display:none}
-.sheet{background:#fff;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;border-radius:18px 18px 0 0}
-.sheet h2{margin:0;padding:16px 16px 4px;font:700 18px "Noto Serif TC","Songti TC",serif}
-.who{padding:0 16px 8px;font-size:13px;color:var(--muted)}
-.list{overflow:auto;padding:0 16px;flex:1}
-.empty{padding:28px 0;text-align:center;color:var(--muted)}
-.line{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
-.line .info{flex:1}
-.amt{width:56px;text-align:right;font-weight:700;font-size:14px}
-.del{border:0;background:none;color:var(--muted);font-size:18px;padding:4px}
-.foot{padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
-.tot{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-weight:600}
-.tot b{font-size:22px;color:var(--bonito)}
-.btns{display:flex;gap:10px}
-.btns button{flex:1}
-:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>團購表單</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 15px;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-<header class="hero">
-  <div class="fish">🐟</div>
-  <h1>大慶柴魚 合購單</h1>
-  <p>價格表更新日 2026.05.27・價格以店內售價為準</p>
-  <p>一起湊滿 $2,500，同一地址免運費</p>
-</header>
 
-<main>
-  <section class="card">
-    <div class="card-h"><span class="ic">🙋</span><div><b>你是誰</b></div></div>
-    <div class="body f"><label for="name">姓名 / 暱稱 *</label><input type="text" id="name" autocomplete="name"></div>
-  </section>
+  <h2>團購訂購單</h2>
 
-  <section class="card"><div class="card-h"><span class="ic">🦑</span><div><b>海味乾貨</b><small>S $150 ／ L $200</small></div></div><div class="body" id="sec1"></div></section>
-  <section class="card"><div class="card-h"><span class="ic">🐟</span><div><b>柴魚與鱈魚香絲</b><small>鱈魚系列 S $100 ／ L $150</small></div></div><div class="body" id="sec2"></div></section>
-  <section class="card"><div class="card-h"><span class="ic">🥡</span><div><b>小包零嘴</b></div></div><div class="body" id="sec3"></div></section>
-  <section class="card"><div class="card-h"><span class="ic">🥫</span><div><b>罐裝系列</b></div></div><div class="body" id="sec4"></div></section>
-  <section class="card"><div class="card-h"><span class="ic">🥮</span><div><b>福和成封仔餅</b><small>一封 10 入・保存期常溫 9 天</small></div></div><div class="body" id="sec5"></div></section>
-  <section class="card"><div class="card-h"><span class="ic">🌶️</span><div><b>醬料與周邊</b></div></div><div class="body" id="sec6"></div></section>
-</main>
-
-<div class="bar">
-  <div class="sum">已選 <span id="count">0</span> 件<b>$<span id="subtotal">0</span></b></div>
-  <button type="button" class="go" id="reviewBtn">確認我的訂單</button>
-</div>
-
-<div class="mask" id="mask" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-label="確認訂單">
-    <h2>確認我的訂單</h2>
-    <div class="who">訂購人：<span id="who"></span></div>
-    <div class="list" id="list"></div>
-    <div class="foot">
-      <div class="tot"><span>合計</span><b>$<span id="total">0</span></b></div>
-      <div class="btns">
-        <button type="button" class="go ghost" id="backBtn">繼續挑選</button>
-        <button type="button" class="go" id="submitBtn">送出訂單</button>
-      </div>
+  <form id="orderForm">
+    <div class="form-group">
+      <label for="name">姓名 / 暱稱：</label>
+      <input type="text" id="name" required placeholder="請輸入姓名">
     </div>
-  </div>
-</div>
 
-<script>
-// 請填入 Apps Script Web App URL
-const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyNdLNnN5T-lepN5O3tQCXuQ3yUxOunYosW8-u_-PcmKhWWIKxRudDRAE_extJcDAJm/exec";
+    <div class="form-group">
+      <label for="itemSpec">品項與規格：</label>
+      <input type="text" id="itemSpec" value="柴魚片 [大包裝]" readonly>
+    </div>
 
-const SL = (s, l) => [{ n: "S $" + s, p: s }, { n: "L $" + l, p: l }];
-const ONE = (p, u) => [{ n: "$" + p + " / " + u, p: p }];
-const add = (sec, names, specs) => names.map(n => ({ sec, name: n, specs }));
+    <div class="form-group">
+      <label for="qty">數量：</label>
+      <input type="number" id="qty" min="1" value="1" required>
+    </div>
 
-const PRODUCTS = [].concat(
-  add("sec1", ["比目魚骨","香魚片","原味魷魚絲","碳烤魷魚絲","煙燻魷魚絲","辣味魷魚片","蜜汁魷魚片","碳烤魷魚片","醉魚","章魚花","豬肉條","純粹旗魚鬆 (袋裝)","酥香旗魚酥 (袋裝)","鬼頭刀魚脯 (袋裝)","原燒魷魚切絲","大卷片","昆布糖","原味飛魚肉乾","辣味飛魚肉乾","梅魚酥"], SL(150, 200)),
-  add("sec2", ["現刨柴魚片 (正鰹)"], [{ n: "150元裝", p: 150 }, { n: "260元裝", p: 260 }]),
-  add("sec2", ["蜜汁柴魚酥"], [{ n: "袋裝 $150", p: 150 }, { n: "罐裝 $150", p: 150 }]),
-  add("sec2", ["正鰹柴魚粉 (研磨)(限量)"], ONE(140, "罐")),
-  add("sec2", ["鱈魚鐵板燒","原味鱈魚香絲","芝麻鱈魚香絲","麻辣鱈魚香絲","海苔鱈魚香絲","香之魚","A級鮪魚糖","正鰹柴魚角"], SL(100, 150)),
-  add("sec3", ["台灣小卷片"], ONE(220, "包")),
-  add("sec3", ["紫菜"], ONE(130, "包")),
-  add("sec3", ["柴魚薯薯"], ONE(100, "包")),
-  add("sec3", ["柴魚米球 (買5送1)"], ONE(150, "包")),
-  add("sec4", ["(罐裝) 純粹旗魚鬆","(罐裝) 酥香旗魚酥","(罐裝) 鬼頭刀魚脯"], ONE(200, "罐")),
-  add("sec4", ["(罐裝) 中蝦杏仁小魚","(罐裝) 黃金杏仁小魚","(罐裝) 杏仁小魚"], ONE(250, "罐")),
-  add("sec5", ["綿密紅豆","經典綠豆","清爽白豆","綿密芋頭"], ONE(260, "封")),
-  add("sec5", ["酸甜洛神花"], ONE(300, "封")),
-  add("sec5", ["綜合五色"], ONE(280, "封")),
-  add("sec6", ["鬼頭刀干貝醬 (小辣)","飛魚卵干貝醬 (中辣)","寶貝醬 (滿滿魚乾 富含鈣質)"], ONE(420, "瓶")),
-  add("sec6", ["大慶柴魚御用刨刀"], ONE(350, "支")),
-  add("sec6", ["送禮紙袋"], ONE(15, "個"))
-).map((p, i) => Object.assign(p, { id: "p" + (i + 1) }));
+    <div class="form-group">
+      <label for="price">單價：</label>
+      <input type="number" id="price" value="250" readonly>
+    </div>
 
-const RICEBALL = "柴魚米球 (買5送1)";
-const $ = id => document.getElementById(id);
-const freeOf = (p, q) => (p.name === RICEBALL ? Math.floor(q / 5) : 0);
-const qtyOf = p => parseInt($("qty-" + p.id).value) || 0;
-const specOf = p => { const s = $("spec-" + p.id); return p.specs[s ? s.selectedIndex : 0]; };
-const picked = () => PRODUCTS.filter(p => qtyOf(p) > 0);
+    <button type="submit" class="btn">送出訂單</button>
+  </form>
 
-window.onload = function () {
-  PRODUCTS.forEach(p => {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.id = "row-" + p.id;
-    const pick = p.specs.length > 1
-      ? '<select class="spec" id="spec-' + p.id + '" onchange="calculate()" aria-label="規格">' + p.specs.map(s => "<option>" + s.n + "</option>").join("") + "</select>"
-      : '<span class="pr">' + p.specs[0].n + "</span>";
-    row.innerHTML =
-      '<div class="info"><div class="nm">' + p.name + '</div><div class="free" id="free-' + p.id + '"></div></div>' +
-      '<div class="ctl">' + pick +
-      '<div class="qty"><button type="button" class="qb" aria-label="減少" onclick="changeQty(\'' + p.id + '\',-1)">−</button>' +
-      '<input class="qn" id="qty-' + p.id + '" value="0" readonly aria-label="數量">' +
-      '<button type="button" class="qb" aria-label="增加" onclick="changeQty(\'' + p.id + '\',1)">＋</button></div></div>';
-    $(p.sec).appendChild(row);
-  });
-};
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxtEkeKQHvbHmbKoVaZfyMwwGxroGsGlGJqN_Qb8TugSgekZvsqEme5ontdSoVKURq3aw/exec";
 
-function changeQty(id, d) {
-  const el = $("qty-" + id);
-  el.value = Math.max(0, (parseInt(el.value) || 0) + d);
-  calculate();
-  if (!$("mask").hidden) renderSheet();
-}
+    document.getElementById("orderForm").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-function calculate() {
-  let sum = 0, cnt = 0;
-  PRODUCTS.forEach(p => {
-    const q = qtyOf(p);
-    sum += q * specOf(p).p;
-    cnt += q;
-    $("row-" + p.id).classList.toggle("on", q > 0);
-    const f = freeOf(p, q);
-    $("free-" + p.id).textContent = f > 0 ? "🎁 加贈 " + f + " 包" : "";
-  });
-  $("subtotal").textContent = sum;
-  $("count").textContent = cnt;
-  return sum;
-}
+      const name = document.getElementById("name").value.trim();
+      const qty = parseInt(document.getElementById("qty").value, 10);
+      const price = parseFloat(document.getElementById("price").value);
+      const total = qty * price;
 
-function renderSheet() {
-  const items = picked();
-  $("who").textContent = $("name").value.trim() || "（尚未填寫姓名）";
-  $("total").textContent = calculate();
-  $("submitBtn").disabled = !items.length;
-  $("list").innerHTML = items.length ? items.map(p => {
-    const q = qtyOf(p), s = specOf(p), f = freeOf(p, q);
-    return '<div class="line"><div class="info"><div class="nm">' + p.name + '</div>' +
-      '<div class="sub">' + s.n + '</div>' + (f ? '<div class="free">🎁 加贈 ' + f + ' 包</div>' : '') + '</div>' +
-      '<div class="qty"><button type="button" class="qb" aria-label="減少" onclick="changeQty(\'' + p.id + '\',-1)">−</button>' +
-      '<span class="qn">' + q + '</span>' +
-      '<button type="button" class="qb" aria-label="增加" onclick="changeQty(\'' + p.id + '\',1)">＋</button></div>' +
-      '<div class="amt">$' + q * s.p + '</div>' +
-      '<button type="button" class="del" aria-label="移除" onclick="changeQty(\'' + p.id + '\',-999)">✕</button></div>';
-  }).join("") : '<div class="empty">還沒選任何商品，回去挑選吧</div>';
-}
+      const payload = {
+        name: name,
+        items: `柴魚片 [大包裝] x${qty}`,
+        total: total,
+        lines: [
+          {
+            name: "柴魚片",
+            spec: "大包裝",
+            price: price,
+            qty: qty,
+            free: 0
+          }
+        ]
+      };
 
-$("reviewBtn").onclick = function () {
-  if (!$("name").value.trim()) { alert("請先填寫姓名 / 暱稱"); $("name").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
-  renderSheet();
-  $("mask").hidden = false;
-};
-$("backBtn").onclick = () => { $("mask").hidden = true; };
-$("mask").onclick = e => { if (e.target === $("mask")) $("mask").hidden = true; };
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        alert("訂單已成功送出！");
+        document.getElementById("orderForm").reset();
+      })
+      .catch(error => {
+        console.error("傳送失敗:", error);
+        alert("送出失敗，請重試");
+      });
+    });
+  </script>
 
-$("submitBtn").onclick = function () {
-  const items = picked().map(p => {
-    const q = qtyOf(p), f = freeOf(p, q);
-    return p.name + " [" + specOf(p).n + "] x" + q + (f ? " (加贈" + f + ")" : "");
-  });
-  if (!items.length) return;
-  const lines = picked().map(p => { const q = qtyOf(p); return { name: p.name, spec: specOf(p).n, price: specOf(p).p, qty: q, free: freeOf(p, q) }; });
-  const payload = { name: $("name").value.trim(), phone: "", items: items.join(", "), total: String(calculate()), lines: lines };
-
-  const btn = $("submitBtn");
-  btn.disabled = true;
-  btn.textContent = "傳送中...";
-  fetch(GAS_WEB_APP_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-    .then(() => {
-      alert("訂單已送出！");
-      PRODUCTS.forEach(p => { $("qty-" + p.id).value = 0; });
-      calculate();
-      $("mask").hidden = true;
-    })
-    .catch(err => { alert("送出失敗，請檢查網路後再試"); console.error(err); })
-    .finally(() => { btn.disabled = false; btn.textContent = "送出訂單"; });
-};
-</script>
 </body>
 </html>
