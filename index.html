@@ -210,7 +210,8 @@ $("submitBtn").onclick = function () {
     return p.name + " [" + specOf(p).n + "] x" + q + (f ? " (加贈" + f + ")" : "");
   });
   if (!items.length) return;
-  const payload = { name: $("name").value.trim(), phone: "", items: items.join(", "), total: String(calculate()) };
+  const lines = picked().map(p => { const q = qtyOf(p); return { name: p.name, spec: specOf(p).n, price: specOf(p).p, qty: q, free: freeOf(p, q) }; });
+  const payload = { name: $("name").value.trim(), phone: "", items: items.join(", "), total: String(calculate()), lines: lines };
 
   const btn = $("submitBtn");
   btn.disabled = true;
