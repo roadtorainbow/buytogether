@@ -41,64 +41,37 @@
 
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-    .form-group input, .form-group select {
+    .form-group input {
       width: 100%;
       padding: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 15px;
-      background-color: #fff;
     }
 
-    /* 商品選擇區域 */
-    .add-item-box {
-      background: #f8f9fa;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px dashed #007bff;
-      margin-bottom: 15px;
-    }
-    .btn-add {
-      width: 100%;
-      padding: 12px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    /* 已選清單 */
-    .selected-item-row {
+    /* 商品列表 */
+    .item-row {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
       padding: 12px 0;
       border-bottom: 1px solid #eee;
     }
-    .selected-item-row:last-child { border-bottom: none; }
-    .item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-      font-size: 15px;
-    }
+    .item-row:last-child { border-bottom: none; }
+    .item-info { flex: 1; padding-right: 10px; }
+    .item-name { font-size: 15px; font-weight: 600; }
+    
     .item-controls {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .spec-select {
-      flex: 1;
-      padding: 8px;
+      padding: 6px 8px;
       border-radius: 6px;
       border: 1px solid #ccc;
-      font-size: 14px;
+      font-size: 13px;
+      background-color: #fff;
     }
     .qty-control {
       display: flex;
@@ -112,27 +85,19 @@
       font-size: 16px;
       font-weight: bold;
       border-radius: 6px;
+      cursor: pointer;
     }
     .qty-input {
-      width: 40px;
+      width: 38px;
       height: 32px;
       text-align: center;
       font-size: 15px;
       border: 1px solid #ddd;
-      margin: 0 4px;
+      margin: 0 3px;
       border-radius: 6px;
     }
-    .btn-del {
-      color: #dc3545;
-      background: none;
-      border: none;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 0 8px;
-      cursor: pointer;
-    }
 
-    /* 底部固定欄 */
+    /* 底部固定金額 */
     .bottom-bar {
       position: fixed;
       bottom: 0;
@@ -193,37 +158,23 @@
       </div>
     </div>
 
-    <!-- 2. 商品選購區 -->
+    <!-- 2. 全商品列表區 -->
     <div class="card">
-      <div class="card-title">選購商品</div>
-      
-      <div class="add-item-box">
-        <div class="form-group">
-          <label>1. 選擇商品分類</label>
-          <select id="categorySelect" onchange="onCategoryChange()">
-            <option value="">-- 請選擇分類 --</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>2. 選擇商品品項</label>
-          <select id="productSelect" disabled>
-            <option value="">-- 請先選擇分類 --</option>
-          </select>
-        </div>
-
-        <button type="button" class="btn-add" onclick="addItem()">+ 加入購物清單</button>
-      </div>
-
-      <!-- 已選商品清單 -->
-      <div id="selectedList">
-        <div style="text-align:center; color:#999; padding:15px; font-size:14px;" id="emptyMsg">
-          尚無選購商品，請從上方選擇品項加入
-        </div>
-      </div>
+      <div class="card-title">柴魚與水產零嘴類</div>
+      <div id="cat1"></div>
     </div>
 
-    <!-- 3. 底部結算 -->
+    <div class="card">
+      <div class="card-title">魷魚與海鮮乾貨類</div>
+      <div id="cat2"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">醬料與魚鬆類</div>
+      <div id="cat3"></div>
+    </div>
+
+    <!-- 3. 底部金額與送出 -->
     <div class="bottom-bar">
       <div class="price-details">
         <span>小計 $<span id="subtotal">0</span> + 運費 $<span id="shipping">0</span></span>
@@ -237,166 +188,81 @@
     // ⚠️ 請填入你在新 Google 帳號部署獲得的 Apps Script Web App URL
     const GAS_WEB_APP_URL = "請在此處貼上步驟二的新網址";
 
-    // 商品全品項資料庫
-    const PRODUCTS_DATA = {
-      "柴魚與水產零嘴類": [
-        { name: "香魚片", specs: [{ name: "小包", price: 150 }, { name: "大包", price: 200 }] },
-        { name: "正鰹柴魚角", specs: [{ name: "小包", price: 100 }, { name: "大包", price: 150 }] },
-        { name: "醉魚 (無酒精)", specs: [{ name: "小包", price: 150 }, { name: "大包", price: 200 }] },
-        { name: "章魚花", specs: [{ name: "小包", price: 150 }, { name: "大包", price: 200 }] },
-        { name: "比目魚骨", specs: [{ name: "小包", price: 150 }, { name: "大包", price: 200 }] },
-        { name: "現刷柴魚片 (150g)", specs: [{ name: "單一規格", price: 150 }] },
-        { name: "柴魚米球 (買5送1)", specs: [{ name: "單一規格", price: 150 }] }
-      ],
-      "魷魚與海鮮乾貨類": [
-        { name: "原燒魷魚切絲", specs: [{ name: "大包", price: 200 }] },
-        { name: "碳烤魷魚片", specs: [{ name: "大包", price: 200 }] },
-        { name: "碳烤魷魚絲", specs: [{ name: "大包", price: 200 }] },
-        { name: "杏仁小魚", specs: [{ name: "單一規格", price: 250 }] },
-        { name: "紫菜", specs: [{ name: "單一規格", price: 130 }] }
-      ],
-      "醬料與魚鬆類": [
-        { name: "鬼頭刀干貝醬 (小辣)", specs: [{ name: "單一規格", price: 420 }] },
-        { name: "(罐裝) 純粹旗魚鬆", specs: [{ name: "單一規格", price: 200 }] }
-      ]
-    };
+    // 全品項資料
+    const PRODUCTS = [
+      // 柴魚與水產零嘴類
+      { id: "p1", cat: "cat1", name: "香魚片", specs: [{ name: "小包 $150", price: 150 }, { name: "大包 $200", price: 200 }] },
+      { id: "p2", cat: "cat1", name: "正鰹柴魚角", specs: [{ name: "小包 $100", price: 100 }, { name: "大包 $150", price: 150 }] },
+      { id: "p3", cat: "cat1", name: "醉魚 (無酒精)", specs: [{ name: "小包 $150", price: 150 }, { name: "大包 $200", price: 200 }] },
+      { id: "p4", cat: "cat1", name: "章魚花", specs: [{ name: "小包 $150", price: 150 }, { name: "大包 $200", price: 200 }] },
+      { id: "p5", cat: "cat1", name: "比目魚骨", specs: [{ name: "小包 $150", price: 150 }, { name: "大包 $200", price: 200 }] },
+      { id: "p6", cat: "cat1", name: "現刷柴魚片 (150g)", specs: [{ name: "單一規格 $150", price: 150 }] },
+      { id: "p7", cat: "cat1", name: "柴魚米球 (買5送1)", specs: [{ name: "單一規格 $150", price: 150 }] },
+      
+      // 魷魚與海鮮乾貨類
+      { id: "p8", cat: "cat2", name: "大卷片", specs: [{ name: "小包 $150", price: 150 }, { name: "大包 $200", price: 200 }] },
+      { id: "p9", cat: "cat2", name: "原燒魷魚切絲", specs: [{ name: "大包 $200", price: 200 }] },
+      { id: "p10", cat: "cat2", name: "碳烤魷魚片", specs: [{ name: "大包 $200", price: 200 }] },
+      { id: "p11", cat: "cat2", name: "碳烤魷魚絲", specs: [{ name: "大包 $200", price: 200 }] },
+      { id: "p12", cat: "cat2", name: "杏仁小魚", specs: [{ name: "單一規格 $250", price: 250 }] },
+      { id: "p13", cat: "cat2", name: "紫菜", specs: [{ name: "單一規格 $130", price: 130 }] },
 
-    let cart = []; // 購物車陣列
+      // 醬料與魚鬆類
+      { id: "p14", cat: "cat3", name: "鬼頭刀干貝醬 (小辣)", specs: [{ name: "單一規格 $420", price: 420 }] },
+      { id: "p15", cat: "cat3", name: "(罐裝) 純粹旗魚鬆", specs: [{ name: "單一規格 $200", price: 200 }] }
+    ];
 
-    // 初始化分類選單
+    // 初始化渲染所有商品
     window.onload = function() {
-      const catSelect = document.getElementById('categorySelect');
-      for (let cat in PRODUCTS_DATA) {
-        let opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat;
-        catSelect.appendChild(opt);
-      }
-    };
-
-    // 當切換分類時
-    function onCategoryChange() {
-      const cat = document.getElementById('categorySelect').value;
-      const prodSelect = document.getElementById('productSelect');
-      prodSelect.innerHTML = '<option value="">-- 請選擇商品 --</option>';
-      
-      if (!cat) {
-        prodSelect.disabled = true;
-        return;
-      }
-
-      PRODUCTS_DATA[cat].forEach((p, idx) => {
-        let opt = document.createElement('option');
-        opt.value = idx;
-        opt.textContent = p.name;
-        prodSelect.appendChild(opt);
-      });
-      prodSelect.disabled = false;
-    }
-
-    // 加入購物清單
-    function addItem() {
-      const cat = document.getElementById('categorySelect').value;
-      const prodIdx = document.getElementById('productSelect').value;
-      
-      if (!cat || prodIdx === "") {
-        alert("請選擇分類與商品！");
-        return;
-      }
-
-      const prod = PRODUCTS_DATA[cat][prodIdx];
-      
-      // 檢查是否已在清單內
-      const exist = cart.find(item => item.name === prod.name);
-      if (exist) {
-        exist.qty += 1;
-      } else {
-        cart.push({
-          name: prod.name,
-          specs: prod.specs,
-          selectedSpecIdx: 0,
-          qty: 1
-        });
-      }
-      
-      renderCart();
-    }
-
-    // 渲染購物車 UI
-    function renderCart() {
-      const listContainer = document.getElementById('selectedList');
-      const emptyMsg = document.getElementById('emptyMsg');
-
-      if (cart.length === 0) {
-        listContainer.innerHTML = '';
-        listContainer.appendChild(emptyMsg);
-        emptyMsg.style.display = 'block';
-        calculate();
-        return;
-      }
-
-      listContainer.innerHTML = '';
-
-      cart.forEach((item, index) => {
+      PRODUCTS.forEach(p => {
+        const container = document.getElementById(p.cat);
         const row = document.createElement('div');
-        row.className = 'selected-item-row';
+        row.className = 'item-row';
 
-        // 建立規格下拉選單選單
-        let specOptions = item.specs.map((s, i) => 
-          `<option value="${i}" ${i === item.selectedSpecIdx ? 'selected' : ''}>${s.name} ($${s.price})</option>`
-        ).join('');
-
-        const currentPrice = item.specs[item.selectedSpecIdx].price;
+        let specOptions = p.specs.map((s, i) => `<option value="${s.price}" data-name="${s.name}">${s.name}</option>`).join('');
 
         row.innerHTML = `
-          <div class="item-header">
-            <span>${item.name}</span>
-            <button type="button" class="btn-del" onclick="removeItem(${index})">✕</button>
+          <div class="item-info">
+            <div class="item-name">${p.name}</div>
           </div>
           <div class="item-controls">
-            <select class="spec-select" onchange="updateSpec(${index}, this.value)">
+            <select class="spec-select" id="spec-${p.id}" onchange="calculate()">
               ${specOptions}
             </select>
             <div class="qty-control">
-              <button type="button" class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
-              <input type="number" class="qty-input" value="${item.qty}" readonly>
-              <button type="button" class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+              <button type="button" class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
+              <input type="number" id="qty-${p.id}" class="qty-input" value="0" readonly>
+              <button type="button" class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
             </div>
           </div>
         `;
-        listContainer.appendChild(row);
+        container.appendChild(row);
       });
+    };
 
+    function changeQty(id, delta) {
+      const input = document.getElementById(`qty-${id}`);
+      let val = parseInt(input.value) || 0;
+      val = Math.max(0, val + delta);
+      input.value = val;
       calculate();
     }
 
-    function updateSpec(index, specIdx) {
-      cart[index].selectedSpecIdx = parseInt(specIdx);
-      calculate();
-    }
-
-    function updateQty(index, delta) {
-      cart[index].qty = Math.max(1, cart[index].qty + delta);
-      renderCart();
-    }
-
-    function removeItem(index) {
-      cart.splice(index, 1);
-      renderCart();
-    }
-
-    // 計算小計與運費
     function calculate() {
       let subtotal = 0;
-      cart.forEach(item => {
-        const price = item.specs[item.selectedSpecIdx].price;
-        const qty = item.qty;
 
-        if (item.name === '柴魚米球 (買5送1)' && qty >= 6) {
-          const freeQty = Math.floor(qty / 6);
-          subtotal += (qty - freeQty) * price;
-        } else {
-          subtotal += qty * price;
+      PRODUCTS.forEach(p => {
+        const qty = parseInt(document.getElementById(`qty-${p.id}`).value) || 0;
+        const specSelect = document.getElementById(`spec-${p.id}`);
+        const price = parseInt(specSelect.value) || 0;
+
+        if (qty > 0) {
+          if (p.name === '柴魚米球 (買5送1)' && qty >= 6) {
+            const freeQty = Math.floor(qty / 6);
+            subtotal += (qty - freeQty) * price;
+          } else {
+            subtotal += qty * price;
+          }
         }
       });
 
@@ -407,19 +273,23 @@
       document.getElementById('total').textContent = subtotal + shipping;
     }
 
-    // 提交送出
     document.getElementById('orderForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      if (cart.length === 0) {
-        alert("請至少選擇一項商品加入購物清單！");
+      let itemsList = [];
+      PRODUCTS.forEach(p => {
+        const qty = parseInt(document.getElementById(`qty-${p.id}`).value) || 0;
+        if (qty > 0) {
+          const specSelect = document.getElementById(`spec-${p.id}`);
+          const specName = specSelect.options[specSelect.selectedIndex].getAttribute('data-name');
+          itemsList.push(`${p.name} [${specName}] x${qty}`);
+        }
+      });
+
+      if (itemsList.length === 0) {
+        alert("請至少選擇一件商品！");
         return;
       }
-
-      let itemsList = cart.map(item => {
-        const specName = item.specs[item.selectedSpecIdx].name;
-        return `${item.name}[${specName}] x${item.qty}`;
-      });
 
       const payload = {
         name: document.getElementById('name').value,
@@ -441,8 +311,10 @@
       .then(() => {
         alert('訂單已送出成功！');
         document.getElementById('orderForm').reset();
-        cart = [];
-        renderCart();
+        PRODUCTS.forEach(p => {
+          document.getElementById(`qty-${p.id}`).value = 0;
+        });
+        calculate();
       })
       .catch(err => {
         alert('送出失敗，請檢查網路');
