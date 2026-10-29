@@ -59,6 +59,8 @@ select,input,textarea,button{font:inherit}
 .tot b{font-size:22px;color:var(--bonito)}
 .btns{display:flex;gap:10px}
 .btns button{flex:1}
+.closed{margin:24px 14px;padding:28px 20px;background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center;font-size:17px;line-height:1.8;font-weight:600}
+.closed[hidden]{display:none}
 :focus-visible{outline:3px solid var(--sea);outline-offset:2px}
 </style>
 </head>
@@ -69,6 +71,8 @@ select,input,textarea,button{font:inherit}
   <p>價格表更新日 2026.05.27・價格以店內售價為準</p>
   <p>一起湊滿 $2,500，同一地址免運費</p>
 </header>
+
+<div class="closed" id="closedMsg" hidden>🐟 本次合購已截止<br>感謝大家的參與！</div>
 
 <main>
   <section class="card">
@@ -106,7 +110,7 @@ select,input,textarea,button{font:inherit}
 
 <script>
 // 請填入 Apps Script Web App URL
-const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyNdLNnN5T-lepN5O3tQCXuQ3yUxOunYosW8-u_-PcmKhWWIKxRudDRAE_extJcDAJm/exec";
+const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz3wbGR2I2BtNSpBm2rsfqmC39CXcKwi4pNwZrbk5YwVMkNRG7lXcuZ3XGRH2RZkYCS/exec";
 
 const SL = (s, l) => [{ n: "S $" + s, p: s }, { n: "L $" + l, p: l }];
 const ONE = (p, u) => [{ n: "$" + p + " / " + u, p: p }];
@@ -139,7 +143,19 @@ const qtyOf = p => parseInt($("qty-" + p.id).value) || 0;
 const specOf = p => { const s = $("spec-" + p.id); return p.specs[s ? s.selectedIndex : 0]; };
 const picked = () => PRODUCTS.filter(p => qtyOf(p) > 0);
 
+function isOpen() {
+  return fetch(GAS_WEB_APP_URL + "?action=status").then(r => r.json()).then(d => d.open !== false).catch(() => true);
+}
+function showClosed() {
+  $("mask").hidden = true;
+  $("closedMsg").hidden = false;
+  document.querySelector("main").style.display = "none";
+  document.querySelector(".bar").style.display = "none";
+  window.scrollTo(0, 0);
+}
+
 window.onload = function () {
+  isOpen().then(ok => { if (!ok) showClosed(); });
   PRODUCTS.forEach(p => {
     const row = document.createElement("div");
     row.className = "row";
@@ -204,7 +220,8 @@ $("reviewBtn").onclick = function () {
 $("backBtn").onclick = () => { $("mask").hidden = true; };
 $("mask").onclick = e => { if (e.target === $("mask")) $("mask").hidden = true; };
 
-$("submitBtn").onclick = function () {
+$("submitBtn").onclick = async function () {
+  if (!(await isOpen())) { showClosed(); return; }
   const items = picked().map(p => {
     const q = qtyOf(p), f = freeOf(p, q);
     return p.name + " [" + specOf(p).n + "] x" + q + (f ? " (加贈" + f + ")" : "");
