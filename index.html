@@ -59,6 +59,9 @@ select,input,textarea,button{font:inherit}
 .tot b{font-size:22px;color:var(--bonito)}
 .btns{display:flex;gap:10px}
 .btns button{flex:1}
+.mini{display:flex;gap:8px;margin-top:12px}
+.mini button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--ink);background:#fff;color:var(--ink);font-size:14px;font-weight:600}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
 .closed{margin:24px 14px;padding:28px 20px;background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center;font-size:17px;line-height:1.8;font-weight:600}
 .closed[hidden]{display:none}
 :focus-visible{outline:3px solid var(--sea);outline-offset:2px}
@@ -77,7 +80,10 @@ select,input,textarea,button{font:inherit}
 <main>
   <section class="card">
     <div class="card-h"><span class="ic">🙋</span><div><b>你是誰</b></div></div>
-    <div class="body f"><label for="name">姓名 / 暱稱 *</label><input type="text" id="name" autocomplete="name"></div>
+    <div class="body f"><label for="name">姓名 / 暱稱 *</label><input type="text" id="name" autocomplete="name">
+      <label for="pin">4 位數密碼 *</label><input type="password" id="pin" inputmode="numeric" maxlength="4" autocomplete="off">
+      <div class="hint">之後要查詢、修改或取消訂單，輸入同樣的暱稱和密碼即可</div>
+      <div class="mini"><button type="button" id="lookupBtn">查詢／修改我的訂單</button><button type="button" id="cancelBtn">取消我的訂單</button></div></div>
   </section>
 
   <section class="card"><div class="card-h"><span class="ic">🦑</span><div><b>海味乾貨</b><small>S $150 ／ L $200</small></div></div><div class="body" id="sec1"></div></section>
@@ -212,8 +218,50 @@ function renderSheet() {
   }).join("") : '<div class="empty">還沒選任何商品，回去挑選吧</div>';
 }
 
+try { const sv = JSON.parse(localStorage.getItem("dq") || "{}"); if (sv.n) { $("name").value = sv.n; $("pin").value = sv.p || ""; } } catch (e) {}
+
+function needId() {
+  if (!$("name").value.trim() || !/^\d{4}$/.test($("pin").value.trim())) {
+    alert("請先填寫暱稱和 4 位數密碼");
+    $("name").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return true;
+  }
+  return false;
+}
+function api(data) {
+  data.name = $("name").value.trim();
+  data.pin = $("pin").value.trim();
+  return fetch(GAS_WEB_APP_URL, { method: "POST", body: JSON.stringify(data) }).then(r => r.json());
+}
+function clearAll() {
+  PRODUCTS.forEach(p => { $("qty-" + p.id).value = 0; const s = $("spec-" + p.id); if (s) s.selectedIndex = 0; });
+  calculate();
+}
+$("lookupBtn").onclick = function () {
+  if (needId()) return;
+  api({ action: "lookup" }).then(r => {
+    if (!r.ok) { alert(r.msg); return; }
+    clearAll();
+    r.lines.forEach(l => {
+      const p = PRODUCTS.find(x => x.name === l.name);
+      if (!p) return;
+      const s = $("spec-" + p.id);
+      if (s) { const i = p.specs.findIndex(x => x.n === l.spec); if (i >= 0) s.selectedIndex = i; }
+      $("qty-" + p.id).value = l.qty;
+    });
+    calculate();
+    alert("已載入你之前的訂單，修改後按「確認我的訂單」重新送出即可。");
+  }).catch(() => alert("查詢失敗，請稍後再試"));
+};
+$("cancelBtn").onclick = function () {
+  if (needId()) return;
+  if (!confirm("確定要取消你的整筆訂單嗎？")) return;
+  api({ action: "cancel" }).then(r => { alert(r.msg); if (r.ok) clearAll(); }).catch(() => alert("取消失敗，請稍後再試"));
+};
+
 $("reviewBtn").onclick = function () {
-  if (!$("name").value.trim()) { alert("請先填寫姓名 / 暱稱"); $("name").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  if (needId()) return;
   renderSheet();
   $("mask").hidden = false;
 };
@@ -228,19 +276,21 @@ $("submitBtn").onclick = async function () {
   });
   if (!items.length) return;
   const lines = picked().map(p => { const q = qtyOf(p); return { name: p.name, spec: specOf(p).n, price: specOf(p).p, qty: q, free: freeOf(p, q) }; });
-  const payload = { name: $("name").value.trim(), phone: "", items: items.join(", "), total: String(calculate()), lines: lines };
+  const payload = { action: "submit", name: $("name").value.trim(), pin: $("pin").value.trim(), lines: lines };
 
   const btn = $("submitBtn");
   btn.disabled = true;
   btn.textContent = "傳送中...";
-  fetch(GAS_WEB_APP_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-    .then(() => {
-      alert("訂單已送出！");
-      PRODUCTS.forEach(p => { $("qty-" + p.id).value = 0; });
-      calculate();
-      $("mask").hidden = true;
+  fetch(GAS_WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
+    .then(r => r.json())
+    .then(r => {
+      alert(r.msg);
+      if (r.ok) {
+        try { localStorage.setItem("dq", JSON.stringify({ n: payload.name, p: payload.pin })); } catch (e) {}
+        $("mask").hidden = true;
+      }
     })
-    .catch(err => { alert("送出失敗，請檢查網路後再試"); console.error(err); })
+    .catch(() => alert("無法確認是否送出成功，請按「查詢／修改我的訂單」確認"))
     .finally(() => { btn.disabled = false; btn.textContent = "送出訂單"; });
 };
 </script>
