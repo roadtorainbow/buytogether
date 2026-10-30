@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>大慶柴魚 - 團購合購單</title>
 <style>
-:root{--ink:#12304a;--sea:#1f5f7a;--salt:#f1f6f7;--card:#fff;--bonito:#c23b4e;--flake:#fbe4df;--line:#dde7ea;--muted:#5d7380}
+:root{--z:1;--ink:#12304a;--sea:#1f5f7a;--salt:#f1f6f7;--card:#fff;--bonito:#c23b4e;--flake:#fbe4df;--line:#dde7ea;--muted:#5d7380}
 *{box-sizing:border-box}
 body{margin:0;padding:0 0 110px;background:var(--salt);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
 .hero{background:var(--ink);color:#fff;text-align:center;padding:26px 16px 40px;position:relative}
@@ -20,21 +20,21 @@ main{padding:14px 14px 0;max-width:640px;margin:0 auto}
 .card-h b{display:block;font:700 16px "Noto Serif TC","Songti TC",serif}
 .card-h small{color:var(--muted);font-size:12px}
 .body{padding:6px 14px 14px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
 .row:last-child{border-bottom:0}
 .row.on .nm{color:var(--bonito)}
-.info{flex:1;min-width:0}
-.nm{font-size:15px;font-weight:600;line-height:1.35}
-.sub{font-size:12px;color:var(--muted)}
-.free{font-size:12px;font-weight:700;color:var(--bonito)}
+.info{flex:1 1 45%;min-width:0}
+.nm{font-size:calc(15px*var(--z));font-weight:600;line-height:1.35}
+.sub{font-size:calc(12px*var(--z));color:var(--muted)}
+.free{font-size:calc(12px*var(--z));font-weight:700;color:var(--bonito)}
 .ctl{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.pr{font-size:13px;color:var(--sea);font-weight:600;white-space:nowrap}
+.pr{font-size:calc(13px*var(--z));color:var(--sea);font-weight:600;white-space:nowrap}
 select,input,textarea,button{font:inherit}
-.spec{padding:6px;border:1px solid #bcccd3;border-radius:8px;font-size:13px;background:#fff;color:var(--ink);max-width:112px}
+.spec{padding:6px;border:1px solid #bcccd3;border-radius:8px;font-size:calc(13px*var(--z));background:#fff;color:var(--ink);max-width:calc(112px*var(--z))}
 .qty{display:flex;align-items:center}
 .qb{width:34px;height:34px;border:0;border-radius:50%;background:var(--ink);color:#fff;font-size:18px;line-height:1}
 .qb:active{background:var(--bonito)}
-.qn{width:32px;text-align:center;font-weight:700;font-size:15px;border:0;background:transparent;color:var(--ink)}
+.qn{width:32px;text-align:center;font-weight:700;font-size:calc(15px*var(--z));border:0;background:transparent;color:var(--ink)}
 .f label{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}
 .f input{width:100%;padding:11px;border:1px solid #bcccd3;border-radius:10px;font-size:15px;background:#fff;color:var(--ink)}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:9;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 14px rgba(18,48,74,.12);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -50,15 +50,18 @@ select,input,textarea,button{font:inherit}
 .who{padding:0 16px 8px;font-size:13px;color:var(--muted)}
 .list{overflow:auto;padding:0 16px;flex:1}
 .empty{padding:28px 0;text-align:center;color:var(--muted)}
-.line{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.line{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
 .line .info{flex:1}
-.amt{width:56px;text-align:right;font-weight:700;font-size:14px}
+.amt{width:calc(56px*var(--z));text-align:right;font-weight:700;font-size:calc(14px*var(--z))}
 .del{border:0;background:none;color:var(--muted);font-size:18px;padding:4px}
 .foot{padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
 .tot{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-weight:600}
 .tot b{font-size:22px;color:var(--bonito)}
 .btns{display:flex;gap:10px}
 .btns button{flex:1}
+.fz{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;font-weight:600}
+.fz button{padding:8px 18px;border-radius:99px;border:1px solid var(--ink);background:#fff;color:var(--ink);font-weight:600}
+.fz button.on{background:var(--ink);color:#fff}
 .mini{display:flex;gap:8px;margin-top:12px}
 .mini button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--ink);background:#fff;color:var(--ink);font-size:14px;font-weight:600}
 .hint{font-size:12px;color:var(--muted);margin-top:6px}
@@ -78,11 +81,11 @@ select,input,textarea,button{font:inherit}
 <div class="closed" id="closedMsg" hidden>🐟 本次合購已截止<br>感謝大家的參與！</div>
 
 <main>
+  <div class="fz"><span>品項字體</span><button type="button" data-z="1" class="on">小</button><button type="button" data-z="1.2">中</button><button type="button" data-z="1.4">大</button></div>
   <section class="card">
     <div class="card-h"><span class="ic">🙋</span><div><b>你是誰</b></div></div>
     <div class="body f"><label for="name">姓名 / 暱稱 *</label><input type="text" id="name" autocomplete="name">
-      <label for="pin">4 位數密碼 *</label><input type="password" id="pin" inputmode="numeric" maxlength="4" autocomplete="off">
-      <div class="hint">之後要查詢、修改或取消訂單，輸入同樣的暱稱和密碼即可</div>
+      <div class="hint">⚠️ 之後要修改或取消，請用<b>同一個暱稱</b>。換暱稱會變成另一張新訂單，金額會重複計算。</div>
       <div class="mini"><button type="button" id="lookupBtn">查詢／修改我的訂單</button><button type="button" id="cancelBtn">取消我的訂單</button></div></div>
   </section>
 
@@ -218,11 +221,19 @@ function renderSheet() {
   }).join("") : '<div class="empty">還沒選任何商品，回去挑選吧</div>';
 }
 
-try { const sv = JSON.parse(localStorage.getItem("dq") || "{}"); if (sv.n) { $("name").value = sv.n; $("pin").value = sv.p || ""; } } catch (e) {}
+try { const sv = JSON.parse(localStorage.getItem("dq") || "{}"); if (sv.n) $("name").value = sv.n; } catch (e) {}
+
+function setZ(z) {
+  document.documentElement.style.setProperty("--z", z);
+  document.querySelectorAll(".fz button").forEach(b => b.classList.toggle("on", b.dataset.z == z));
+  try { localStorage.setItem("dz", z); } catch (e) {}
+}
+document.querySelectorAll(".fz button").forEach(b => { b.onclick = () => setZ(b.dataset.z); });
+try { const z = localStorage.getItem("dz"); if (z) setZ(z); } catch (e) {}
 
 function needId() {
-  if (!$("name").value.trim() || !/^\d{4}$/.test($("pin").value.trim())) {
-    alert("請先填寫暱稱和 4 位數密碼");
+  if (!$("name").value.trim()) {
+    alert("請先填寫姓名 / 暱稱");
     $("name").focus();
     window.scrollTo({ top: 0, behavior: "smooth" });
     return true;
@@ -231,7 +242,6 @@ function needId() {
 }
 function api(data) {
   data.name = $("name").value.trim();
-  data.pin = $("pin").value.trim();
   return fetch(GAS_WEB_APP_URL, { method: "POST", body: JSON.stringify(data) }).then(r => r.json());
 }
 function clearAll() {
@@ -276,7 +286,7 @@ $("submitBtn").onclick = async function () {
   });
   if (!items.length) return;
   const lines = picked().map(p => { const q = qtyOf(p); return { name: p.name, spec: specOf(p).n, price: specOf(p).p, qty: q, free: freeOf(p, q) }; });
-  const payload = { action: "submit", name: $("name").value.trim(), pin: $("pin").value.trim(), lines: lines };
+  const payload = { action: "submit", name: $("name").value.trim(), lines: lines };
 
   const btn = $("submitBtn");
   btn.disabled = true;
@@ -286,7 +296,7 @@ $("submitBtn").onclick = async function () {
     .then(r => {
       alert(r.msg);
       if (r.ok) {
-        try { localStorage.setItem("dq", JSON.stringify({ n: payload.name, p: payload.pin })); } catch (e) {}
+        try { localStorage.setItem("dq", JSON.stringify({ n: payload.name })); } catch (e) {}
         $("mask").hidden = true;
       }
     })
